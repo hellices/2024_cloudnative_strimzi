@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: my-apicurio-registry
+  namespace: operators
+spec:
+  channel: 2.x
+  name: apicurio-registry
+  source: operatorhubio-catalog
+  sourceNamespace: olm
