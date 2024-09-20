@@ -1,0 +1,205 @@
+replicaCount: 1
+
+image:
+  registry: ghcr.io
+  repository: kafbat/kafka-ui
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+existingConfigMap: ""
+yamlApplicationConfig:
+  # {}
+  kafka:
+    clusters:
+      - name: my-broker
+        bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
+  integration:
+    odd:
+      url: "http://apicurio-apicurio-registry.kafka-manager:8080"
+      token: "8UPwAqr2lzcycMh3FOr8UxXoKqNpsaWntjkSSxWR"
+  # spring:
+  #   security:
+  #     oauth2:
+  # auth:
+  #   type: disabled
+  # management:
+  #   health:
+  #     ldap:
+  #       enabled: false
+yamlApplicationConfigConfigMap:
+  {}
+  # keyName: config.yml
+  # name: configMapName
+yamlApplicationConfigSecret:
+  {}
+  # keyName: config.yml
+  # name: secretName
+
+existingSecret: ""
+envs:
+  secret: {}
+  config: {}
+  secretMappings: {}
+    #ENV_NAME:
+    #  name: kubernetes-secret-name
+    #  keyName: kubernetes-secret-key
+  configMappings: {}
+    #ENV_NAME:
+    #  name: kubernetes-configmap-name
+    #  keyName: kubernetes-configmap-key
+
+networkPolicy:
+  enabled: false
+  egressRules:
+    ## Additional custom egress rules
+    ## e.g:
+    ## customRules:
+    ##   - to:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: []
+  ingressRules:
+    ## Additional custom ingress rules
+    ## e.g:
+    ## customRules:
+    ##   - from:
+    ##       - namespaceSelector:
+    ##           matchLabels:
+    ##             label: example
+    customRules: []
+
+podAnnotations: {}
+podLabels: {}
+
+## Annotations to be added to kafka-ui Deployment
+##
+annotations: {}
+
+## Set field schema as HTTPS for readines and liveness probe
+##
+probes:
+  useHttpsScheme: false
+
+podSecurityContext:
+  runAsUser: 0
+  runAsGroup: 0
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 80
+  # In case of service type LoadBalancer, you can specify reserved static IP
+  # loadBalancerIP: 10.11.12.13
+  # if you want to force a specific nodePort. Must be use with service.type=NodePort
+  # nodePort:
+  annotations: {}
+# Ingress configuration
+ingress:
+  # Enable ingress resource
+  enabled: false
+
+  # Annotations for the Ingress
+  annotations: {}
+
+  # ingressClassName for the Ingress
+  ingressClassName: ""
+
+  # The path for the Ingress
+  path: "/"
+
+  # The path type for the Ingress
+  pathType: "Prefix"  
+
+  # The hostname for the Ingress
+  host: ""
+
+  # configs for Ingress TLS
+  tls:
+    # Enable TLS termination for the Ingress
+    enabled: false
+    # the name of a pre-created Secret containing a TLS private key and certificate
+    secretName: ""
+
+  # HTTP paths to add to the Ingress before the default path
+  precedingPaths: []
+
+  # Http paths to add to the Ingress after the default path
+  succeedingPaths: []
+
+resources:
+  {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 200m
+  #   memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env: {}
+
+initContainers: {}
+
+volumeMounts: {}
+
+volumes: {}
+
+hostAliases: {}
+
+## Specify additional containers in extraContainers.
+## For example, to add an authentication proxy to a kafka-ui pod.
+extraContainers: |
+# - name: proxy
+#   image: quay.io/gambol99/keycloak-proxy:latest
+#   args:
+#   - -provider=github
+#   - -client-id=
+#   - -client-secret=
+#   - -github-org=<ORG_NAME>
+#   - -email-domain=*
+#   - -cookie-secret=
+#   - -http-address=http://0.0.0.0:4181
+#   - -upstream-url=http://127.0.0.1:3000
+#   ports:
+#     - name: proxy-web
+#       containerPort: 4181
+
+apicurio:
+  connect: true
+  lib:
+    downloadpath: https://github.com/hellices/kafkaui-glue-apicurio-serde/releases/download/v1.0.0-SNAPSHOT/kafbatui-glue-apicurio-serde-1.0-SNAPSHOT-jar-with-dependencies.jar
