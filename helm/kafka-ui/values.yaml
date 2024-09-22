@@ -27,9 +27,19 @@ yamlApplicationConfig:
     clusters:
       - name: my-broker
         bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092
+        schemaRegistry: http://apicurio-apicurio-registry.kafka-manager/apis/ccompat/v7
+        serde:
+          - name: ApicurioGlueSerde
+            className: com.kafka.ui.serdes.glue.ApicurioGlueSerde
+            filePath: /shared/kafbatui-glue-apicurio-serde-1.0-SNAPSHOT-jar-with-dependencies.jar
+            properties:
+              endpoint: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
+        kafkaconnect:
+          - name: my-connect
+            address: http://my-connect-cluster-connect.kafka:8083
   integration:
     odd:
-      url: "http://apicurio-apicurio-registry.kafka-manager:8080"
+      url: "http://odd-platform"
       token: "8UPwAqr2lzcycMh3FOr8UxXoKqNpsaWntjkSSxWR"
   # spring:
   #   security:
@@ -95,9 +105,8 @@ annotations: {}
 probes:
   useHttpsScheme: false
 
-podSecurityContext:
+podSecurityContext: 
   runAsUser: 0
-  runAsGroup: 0
 
 securityContext:
   {}

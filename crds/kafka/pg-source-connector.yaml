@@ -1,0 +1,23 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: my-pg-source-connector
+  labels:
+    # The strimzi.io/cluster label identifies the KafkaConnect instance
+    # in which to create this connector. That KafkaConnect instance
+    # must have the strimzi.io/use-connector-resources annotation
+    # set to true.
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 2
+  config:
+    connector.class: io.debezium.connector.postgresql.PostgresConnector
+    database.hostname: source-pg-postgresql-hl.database
+    database.port: 5432
+    database.user: postgres
+    database.password: source
+    database.dbname: source
+    topic.prefix: source
+    plugin.name: pgoutput
+    slot.name: debezium_slot

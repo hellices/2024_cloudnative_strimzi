@@ -30,10 +30,18 @@ global:
     ## @param global.postgresql.auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
     ##
     auth:
-      postgresPassword: "myodd"
-      username: "myodd"
-      password: "myodd"
-      database: "odd-platform"
+      # postgresPassword: "myodd"
+      # username: "myodd"
+      # password: "myodd"
+      # database: "odd-platform"
+      postgresPassword: "source"
+      username: "source"
+      password: "source"
+      database: "source"
+      # postgresPassword: "target"
+      # username: "target"
+      # password: "target"
+      # database: "target"
       existingSecret: ""
       secretKeys:
         adminPasswordKey: ""
@@ -389,11 +397,15 @@ primary:
     primaryPort: ""
   ## @param primary.extraEnvVars Array with extra environment variables to add to PostgreSQL Primary nodes
   ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
+  extraEnvVars:
+    - name: POSTGRESQL_WAL_LEVEL
+      value: logical
+    - name: POSTGRESQL_MAX_REPLICATION_SLOTS
+      value: "10"
+    - name: POSTGRESQL_MAX_WAL_SENDERS
+      value: "10"
+  
+  # extraEnvVars: []
   ## @param primary.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for PostgreSQL Primary nodes
   ##
   extraEnvVarsCM: ""

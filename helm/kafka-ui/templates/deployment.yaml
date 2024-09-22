@@ -35,24 +35,23 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.initContainers }}
+      {{- if .Values.apicurio.connect }}
       initContainers:
-        {{- toYaml . | nindent 8 }}
+        - name: init-container
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - cd /shared && wget {{ .Values.apicurio.lib.downloadpath }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared  # 파일 다운로드 경로
       {{- end }}
       serviceAccountName: {{ include "kafka-ui.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- if .Values.apicurio.connect }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - wget {{ .Values.apicurio.lib.downloadpath }}
-          {{- end}}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ include "kafka-ui.imageName" . }}
@@ -134,6 +133,8 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if or .Values.yamlApplicationConfig .Values.volumeMounts .Values.yamlApplicationConfigConfigMap .Values.yamlApplicationConfigSecret }}
           volumeMounts:
+            - name: shared-data
+              mountPath: /shared  # 같은 경로에 공유된 볼륨 마운트
             {{- with .Values.volumeMounts }} 
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -155,6 +156,8 @@ spec:
         {{- end }}
       {{- if or .Values.yamlApplicationConfig .Values.volumes .Values.yamlApplicationConfigConfigMap .Values.yamlApplicationConfigSecret }}
       volumes:
+        - name: shared-data
+          emptyDir: {}  # 공유 볼륨 설정 (emptyDir는 컨테이너 간의 임시 저장소)
         {{- with .Values.volumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
