@@ -11,20 +11,20 @@ spec:
   # Bootstrap servers (required)
   bootstrapServers: my-cluster-kafka-bootstrap.kafka:9092 # (4)
   # Kafka Connect configuration (recommended)
-  config: # (5)
-    group.id: my-connect-cluster
-    offset.storage.topic: my-connect-cluster-offsets
-    config.storage.topic: my-connect-cluster-configs
-    status.storage.topic: my-connect-cluster-status
-    key.converter: io.apicurio.registry.utils.converter.AvroConverter
-    key.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
-    key.converter.apicurio.registry.auto-register: true
-    key.converter.apicurio.registry.find-latest: true
-    value.converter: io.apicurio.registry.utils.converter.AvroConverter
-    value.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
-    value.converter.apicurio.registry.auto-register: true
-    value.converter.apicurio.registry.find-latest: true
-    schema.name.adjustment.mode: avro
+  # config: # (5)
+  #   group.id: my-connect-cluster
+  #   offset.storage.topic: my-connect-cluster-offsets
+  #   config.storage.topic: my-connect-cluster-configs
+  #   status.storage.topic: my-connect-cluster-status
+  #   key.converter: io.apicurio.registry.utils.converter.AvroConverter
+  #   key.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
+  #   key.converter.apicurio.registry.auto-register: true
+  #   key.converter.apicurio.registry.find-latest: true
+  #   value.converter: io.apicurio.registry.utils.converter.AvroConverter
+  #   value.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
+  #   value.converter.apicurio.registry.auto-register: true
+  #   value.converter.apicurio.registry.find-latest: true
+  #   schema.name.adjustment.mode: avro
   # Resources requests and limits (recommended)
   resources: # (6)
     requests:
@@ -36,7 +36,7 @@ spec:
   build:
     output: 
       type: docker
-      image: hellices/kafka-connect:1.3
+      image: hellices/kafka-connect:1.4
       pushSecret: docker-hub-secret
     plugins: 
       - name: debezium-connector-postgres
@@ -46,6 +46,6 @@ spec:
       - name: apicurio-converter
         artifacts:
           - type: tgz
-            url: https://repo1.maven.org/maven2/io/apicurio/apicurio-registry-distro-connect-converter/2.5.11.Final/apicurio-registry-distro-connect-converter-2.5.11.Final.tar.gz
+            url: https://repo1.maven.org/maven2/io/apicurio/apicurio-registry-distro-connect-converter/2.0.2.Final/apicurio-registry-distro-connect-converter-2.0.2.Final.tar.gz
 
             

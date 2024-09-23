@@ -1,7 +1,7 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaConnector
 metadata:
-  name: my-pg-source-connector
+  name: my-pg-source-json-connector
   labels:
     # The strimzi.io/cluster label identifies the KafkaConnect instance
     # in which to create this connector. That KafkaConnect instance
@@ -18,14 +18,6 @@ spec:
     database.user: postgres
     database.password: source
     database.dbname: source
-    topic.prefix: source
+    topic.prefix: source-json
     plugin.name: pgoutput
     slot.name: debezium_slot
-    key.converter: io.apicurio.registry.utils.converter.AvroConverter
-    key.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
-    key.converter.apicurio.registry.auto-register: true
-    key.converter.apicurio.registry.find-latest: true
-    value.converter: io.apicurio.registry.utils.converter.AvroConverter
-    value.converter.apicurio.registry.url: http://apicurio-apicurio-registry.kafka-manager/apis/registry/v2
-    value.converter.apicurio.registry.auto-register: true
-    value.converter.apicurio.registry.find-latest: true

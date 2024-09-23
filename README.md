@@ -116,6 +116,9 @@ management -> collectors -> add collector
 <img src="./static/odd_collecor_config.png">
 
 - values.yaml에 kafka, avro odd 연동 config 추가
+- scheme registry는 confluent api로 동작하기 때문에 endpoint가 ccompat/v7로
+- ser/de는 apicurio converter를 사용한다.
+
 ```yaml
 yamlApplicationConfig:
   # {}
@@ -172,7 +175,7 @@ kafka ui에서 apicurio scheme registry를 이용해 avro 등에 대한 serdes�
 apicurio:
   connect: true
   lib:
-    downloadpath: https://github.com/hellices/kafkaui-glue-apicurio-serde/releases/download/v1.0.0-SNAPSHOT/kafbatui-glue-apicurio-serde-1.0-SNAPSHOT-jar-with-dependencies.jar
+    downloadpath: https://github.com/hellices/kafkaui-glue-apicurio-serde/releases/download/v1.0.0/kafbatui-glue-apicurio-serde-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ## 모니터링 도구 설치
@@ -242,7 +245,7 @@ source-pg에 100만건 데이터 생성
 /* psql -U postgres -d source */
 alter role source WITH REPLICATION;
 /* end */
-CREATE TABLE sample AS 
+CREATE TABLE mysample AS 
     SELECT
         gs as idx,
         '테스트 문자열' || gs AS test_string,
@@ -271,4 +274,16 @@ collectorConfig: |
 odd collector 배포
 ```yaml
 helm upgrade -i odd-collector ./helm/odd-collector -f ./helm/odd-collector/values.yaml -n kafka-manager
+```
+
+## 삭제
+```yaml
+helm delete apicurio -n kafka-manager
+helm delete kafka-ui -n kafka-manager
+helm delete odd-collector -n kafka-manager
+helm delete odd-platform -n kafka-manager
+helm delete my-postgres -n kafka-manager
+kubectl delete -f crds/kafka/pg-source-connector.yaml -n kafka
+kubectl delete -f crds/kafka/kafka_with_monitor.yaml -n kafka
+kubectl delete kafkaconnect my-connect-cluster -n kafka
 ```

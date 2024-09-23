@@ -63,7 +63,7 @@ affinity: {}
 
 collectorConfig: |
   default_pulling_interval: 10
-  token: "iUZ2MawKUgCb3w8oOAjCr9nJK7qWLaRnV4Z4l1yF"
+  token: "j1iqxW1EW6NBd64zceWw5Ukv3lhP83DdHtyd4OcX"
   platform_host_url: "http://odd-platform.kafka-manager"
   plugins:
     - type: postgresql
