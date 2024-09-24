@@ -183,7 +183,10 @@ apicurio:
 ### kafka exporter
 strimzi operator는 kafka exporter를 같이 제공한다.   
 먼저 kafka에서 metric 수집이 가능하도록 설정을 추가한다.   
-kafka-metrics configmap은 [strimzi 예제](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/kafka-metrics.yaml)를 참고한다.   
+strimzi metrics config 예제   
+- [kafka](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/kafka-metrics.yaml)
+- [kafka connect](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/kafka-connect-metrics.yaml)
+
 ```yaml
 # kafka.yaml
     metricsConfig: 
@@ -215,13 +218,15 @@ kubernetes에서 prometheus를 operator로 설치한 경우 kubernetes_sd_config
 
     relabel_configs:
     # Scrape only pods with the annotation: prometheus.io/scrape = true
-    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]±±
       action: keep
       regex: true
 ```
 
-### grafana dashboard
-strimzi에서 기본으로 제공해주는 [대시보드](https://github.com/strimzi/strimzi-kafka-operator/tree/main/examples/metrics/grafana-dashboards)를 참고
+### grafana dashboard(strimzi example)
+- [kafka](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/grafana-dashboards/strimzi-kafka.json)
+- [kafka connect](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/grafana-dashboards/strimzi-kafka-connect.json)++
+- [kafka exporter(lags)](https://github.com/strimzi/strimzi-kafka-operator/blob/main/examples/metrics/grafana-dashboards/strimzi-kafka-exporter.json)  
 
 ## cdc 예제
 
